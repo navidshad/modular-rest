@@ -10,7 +10,7 @@ module.exports = function(obj, requiredFields)
     if(type == 'string') 
         result = ckeckSimple(obj, requiredFields);
     else if(type == 'object')
-        result = checkComlex(obj, requiredFields);
+        result = checkComplex(obj, requiredFields);
 
     else throw('requiredFields has wrong form, it must be string or object');
 
@@ -30,7 +30,7 @@ function ckeckSimple(obj, requiredFields='')
 
     requires.forEach(key =>
     {
-        if (obj.hasOwnProperty(key)) 
+        if (obj[key]) 
             validMembers++;
         else notValidKeys.push(key);
     });
@@ -40,7 +40,7 @@ function ckeckSimple(obj, requiredFields='')
     return _returnResult(isValide, notValidKeys);
 }
 
-function checkComlex(obj, requiredFields={})
+function checkComplex(obj, requiredFields={})
 {
     let isValide = false;
     let requireKeys = Object.keys(requiredFields);

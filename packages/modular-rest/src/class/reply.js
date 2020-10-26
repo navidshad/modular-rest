@@ -1,5 +1,5 @@
 // generate structured respons json
-module.exports.create = function(status, detail={}, more=[])
+module.exports.create = function(status, detail={})
 {
     /* result template
     * status : "success", "fail", "error",
@@ -9,23 +9,7 @@ module.exports.create = function(status, detail={}, more=[])
     * more detail
     */
 
-    let result = {};
-
-    // defin respons detail
-    if(detail['d']) result['data'] = detail['d'];
-    if(detail['m']) result['message'] = detail['m'];
-    if(detail['e']) result['error'] = detail['e'];
-
-    delete detail['d'];
-    delete detail['e'];
-    delete detail['m'];
-
-    for (const key in detail) {
-        if (detail.hasOwnProperty(key)) {
-            const property = detail[key];
-            result[key] = property;
-        }
-    }
+    let result = detail || {};
 
     // defin status
     switch (status) {
@@ -44,11 +28,6 @@ module.exports.create = function(status, detail={}, more=[])
         default:
             result['status'] = 'success';
             break;
-    }
-
-    if(typeof more == 'object')
-    {
-
     }
 
     // return

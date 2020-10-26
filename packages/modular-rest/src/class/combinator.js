@@ -1,10 +1,10 @@
-import Router from 'koa-router';
+let Router = require('koa-router');
 let directory = require('./directory.js');
 
 class Combinator {
 
     async combineRoutesByFilePath(rootDirectory, app) {
-        // find route pathes
+        // find route paths
         let option = { name: 'router', filter: ['.js'] }
         let routerPaths = await directory.find(rootDirectory, option).then()
             .catch(e => { console.log(e) });
@@ -22,9 +22,21 @@ class Combinator {
         }
     }
 
-    combineServicesByFilePath(rootDirectory, filename, otherOption = {}) {
-        // find route pathes
-        let rootObject_temp = {};
+    /**
+     * 
+     * @param {object} option
+     * @param {string} option.rootDirectory root directory of files
+     * @param {object} option.filename an object of {name, extension} 
+     * @param {string} option.filename.name name of file
+     * @param {string} option.filename.extension the extension of the file
+     * @param {boolean} option.combineWithRoot combine all file content and return theme as a object
+     * @param {boolean} option.convertToArray return file content as an array instead an object
+     */
+    async combineModulesByFilePath({
+        rootDirectory, filename, combineWithRoot, convertToArray
+    }) {
+        // find route paths
+        let rootObject_temp;
         let option = { name: filename.name, filter: [filename.extension] }
         let modulesPath = await directory.find(rootDirectory, option).then()
             .catch(e => { console.log(e) });
@@ -34,9 +46,19 @@ class Combinator {
             let moduleObject = require(modulesPath[i]);
 
             //act by otherOption
-            if (otherOption.combineWithRoot) {
-                delete moduleObject.name;
-                rootObject_temp = this.extendObj(rootObject_temp, moduleObject);
+            if (combineWithRoot) {
+                if(moduleObject.name)
+                    delete moduleObject.name;
+
+                if(moduleObject.length) {
+                    if(!rootObject_temp) rootObject_temp = [];
+
+                    rootObject_temp = [...rootObject_temp, ...moduleObject];
+                }
+                else {
+                    rootObject_temp = this.extendObj(rootObject_temp, moduleObject);
+                }
+                // else if (typeof)
             }
             // default act
             else {
@@ -47,7 +69,7 @@ class Combinator {
 
         // options 
         // convertToArray
-        if (otherOption.convertToArray) {
+        if (convertToArray) {
             rootObject_temp = Object.values(rootObject_temp);
         }
 

@@ -25,13 +25,16 @@
   },
   "homepage": "https://github.com/navidshad/modular-rest#readme",
   "dependencies": {
+    "colog": "^1.0.4",
+    "file-system": "^2.2.2",
+    "generate-rsa-keypair": "^0.2.1",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.5.3",
-    "koa-router": "^7.4.0"
+    "koa-body": "^4.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "mongoose": "^5.10.9",
+    "nested-property": "^4.0.0"
   },
-  "devDependencies": {
-    "typescript": "^4.0.2",
-    "@types/node": "^14.6.4",
-    "@types/koa": "^2.5.3",
-    "@types/koa-router": "^7.4.0"
-  }
+  "devDependencies": {}
 }
