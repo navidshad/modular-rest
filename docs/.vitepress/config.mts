@@ -129,7 +129,9 @@ export default defineConfig({
           { text: "Install", link: "/js-client/install" },
           { text: "Authentication", link: "/js-client/authentication" },
           { text: "Data Provider", link: "/js-client/data-provider" },
-          { text: "file Provider", link: "/js-client/file-provider" },
+          { text: "File Provider", link: "/js-client/file-provider" },
+          { text: "Function Provider", link: "/js-client/function-provider" },
+
         ],
       },
       // {
