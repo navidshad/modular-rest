@@ -64,10 +64,19 @@ export default defineConfig({
             items: [
               { text: "Database", link: "/server-client-ts/utility/database" },
               { text: "Router", link: "/server-client-ts/utility/router" },
+              { text: "Validator", link: "/server-client-ts/utility/validator" },
+              {
+                text: "Type Casters",
+                link: "/server-client-ts/utility/type-casters",
+              },
               { text: "File", link: "/server-client-ts/utility/file" },
               {
                 text: "UserManager",
                 link: "/server-client-ts/utility/user-manager",
+              },
+              {
+                text: "Model Registry",
+                link: "/server-client-ts/utility/model-registry",
               },
             ],
           },

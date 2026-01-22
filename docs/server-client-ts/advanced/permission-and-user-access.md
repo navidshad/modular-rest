@@ -15,6 +15,15 @@ The system only allows an operation when there's a match between the permission 
 ## Permission
 <!-- @include: @/server-client-ts/generative/classes/permission.md -->
 
+## Permission Types
+<!-- @include: @/server-client-ts/generative/classes/permissionTypes.md -->
+
+## Access Types
+<!-- @include: @/server-client-ts/generative/classes/accessTypes.md -->
+
+## Access Definition
+<!-- @include: @/server-client-ts/generative/classes/accessDefinition.md -->
+
 ## Permission Group
 <!-- @include: @/server-client-ts/generative/classes/permissionGroup.md -->
 

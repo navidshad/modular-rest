@@ -50,7 +50,15 @@ The permission system in this framework provides a robust way to control access 
 <!-- @include: @/server-client-ts/generative/classes/permission.md#example -->
 
 ## Triggers
+In a complex application, you may need to perform additional actions after a database operation. This is where triggers come in.
+
+### Database Triggers
+Database triggers allow you to define callbacks for specific database operations on a collection.
 <!-- @include: @/server-client-ts/generative/classes/databaseTrigger.md -->
+
+### CMS Triggers
+CMS triggers allow you to define callbacks for operations performed via the CMS.
+<!-- @include: @/server-client-ts/generative/classes/CmsTrigger.md -->
 
 ## Linking Collections
 You can link any collection from same database into an schema to perform `populate queries`, but let me tell you what it is simply:
