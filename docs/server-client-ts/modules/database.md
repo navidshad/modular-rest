@@ -85,6 +85,28 @@ const postSchema = new Schema({
 });
 ```
 
+## Cross Database Populate
+While Mongoose's standard `populate()` works within the same database, Modular-rest enables cross-database population by leveraging the `modelRegistry`. This is useful when you have collections in different MongoDB databases that need to reference each other.
+
+To perform a cross-database populate, you must provide the model from the destination database to the `populate()` method.
+
+```typescript
+import { modelRegistry } from '@modular-rest/server';
+
+// 1. Get the model from the other database
+const userModel = modelRegistry.getModel('auth_db', 'users');
+
+// 2. Use it in your query
+const posts = await postModel.find().populate({
+	path: 'author',
+	model: userModel // [!code focus]
+});
+```
+
+For more details on accessing models, see the [Model Registry documentation](/server-client-ts/utility/model-registry).
+
+More info on [cross-database populate](https://mongoosejs.com/docs/5.x/docs/populate.html#cross-db-populate).
+
 ## Full Example
 Let's see a full example of `db.ts` file:
 
