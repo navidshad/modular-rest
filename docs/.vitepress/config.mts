@@ -82,8 +82,8 @@ export default defineConfig({
             ],
           },
           {
-            text: "AI Prompt",
-            link: "/server-client-ts/ai-context.md",
+            text: "LLM Context",
+            link: "/server-client-ts/llm-context.md",
           },
         ],
       },
@@ -131,6 +131,7 @@ export default defineConfig({
           { text: "Data Provider", link: "/js-client/data-provider" },
           { text: "File Provider", link: "/js-client/file-provider" },
           { text: "Function Provider", link: "/js-client/function-provider" },
+          { text: "LLM Context", link: "/js-client/llm-context" },
 
         ],
       },
