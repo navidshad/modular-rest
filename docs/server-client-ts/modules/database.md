@@ -102,7 +102,7 @@ const postSchema = new Schema({
     title: String,
     author: {
         type: Schema.Types.ObjectId,
-        ref: userModel // [!code focus]
+        ref: userModel
     }
 });
 ```
