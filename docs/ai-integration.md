@@ -6,7 +6,7 @@ Our structured documentation helps AI tools fully understand library capabilitie
 
 ## Server TypeScript Guide
 
-The [Server TypeScript Guide](/server-client-ts/ai-context.md) provides comprehensive documentation for:
+The [Server TypeScript Guide](/server-client-ts/llm-context.md) provides comprehensive documentation for:
 
 - **Server Implementation** - Core TypeScript server setup and configuration
 - **Database Operations** - Querying, updating, and managing data
