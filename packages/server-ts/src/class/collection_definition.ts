@@ -117,8 +117,8 @@ export function defineCollection(
 
       throw new Error(
         `Model for ${definition.database}.${definition.collection} is not available. ` +
-          `Ensure mongoOption is provided in defineCollection options, config.mongo is set, ` +
-          `or the collection is registered via addCollectionDefinitionByList before accessing the model.`
+        `Ensure mongoOption is provided in defineCollection options, config.mongo is set, ` +
+        `or the collection is registered via addCollectionDefinitionByList before accessing the model.`
       );
     },
     enumerable: true,
@@ -204,6 +204,13 @@ export class CollectionDefinition {
     this.schema = schema;
     this.permissions = permissions;
     this.triggers = triggers;
+
+    // Apply triggers to schema
+    if (this.triggers) {
+      this.triggers.forEach(trigger => {
+        trigger.applyToSchema(this.schema);
+      });
+    }
   }
 
   /**

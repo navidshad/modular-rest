@@ -96,42 +96,6 @@ export default defineConfig({
           },
         ],
       },
-      // {
-      //   text: "Server",
-      //   items: [
-      //     { text: "Install", link: "/server-client/install" },
-      //     { text: "Key Concepts", link: "/server-client/key-concepts" },
-      //     { text: "Configuration", link: "/server-client/configuration" },
-      //     {
-      //       text: "Modules",
-      //       items: [
-      //         { text: "Intro", link: "/server-client/modules/intro" },
-      //         { text: "Database", link: "/server-client/modules/database" },
-      //         { text: "Functions", link: "/server-client/modules/functions" },
-      //         {
-      //           text: "Custom Route",
-      //           link: "/server-client/modules/custom-route",
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       text: "Utility",
-      //       items: [
-      //         { text: "Database", link: "/server-client/utility/database" },
-      //         { text: "Router", link: "/server-client/utility/router" },
-      //         { text: "File", link: "/server-client/utility/file" },
-      //         {
-      //           text: "UserManager",
-      //           link: "/server-client/utility/user-manager",
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       text: "Advanced Topics",
-      //       items: [{ text: "Cors", link: "/server-client/advanced/cors" }],
-      //     },
-      //   ],
-      // },
       {
         text: "Client",
         items: [
@@ -141,7 +105,6 @@ export default defineConfig({
           { text: "File Provider", link: "/js-client/file-provider" },
           { text: "Function Provider", link: "/js-client/function-provider" },
           { text: "LLM Context", link: "/js-client/llm-context" },
-
         ],
       },
       // {

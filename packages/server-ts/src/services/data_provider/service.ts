@@ -1,6 +1,6 @@
 import mongoose, { Connection, Model, PopulateOptions, Query } from 'mongoose';
 import { AccessTypes, AccessDefinition, Permission } from '../../class/security';
-import triggerOperator from '../../class/trigger_operator';
+
 import TypeCasters from './typeCasters';
 import { config } from '../../config';
 import { CollectionDefinition } from '../../class/collection_definition';
@@ -128,20 +128,7 @@ function connectToDatabaseByCollectionDefinitionList(
         permissionList: collectionDefinition.permissions,
       });
 
-      // add trigger
-      if (collectionDefinition.triggers != undefined) {
-        if (!Array.isArray(collectionDefinition.triggers)) {
-          throw new Error('Triggers must be an array');
-        }
 
-        collectionDefinition.triggers.forEach(trigger => {
-          triggerOperator.addTrigger({
-            ...trigger,
-            database: collectionDefinition.database,
-            collection: collectionDefinition.collection,
-          });
-        });
-      }
     });
 
     // If connection is already connected, resolve immediately
@@ -362,5 +349,5 @@ export function performAdditionalOptionsToQueryObject<T = any>(
   return queryObj;
 }
 
-// Instead, export triggerOperator as triggers
-export { triggerOperator as triggers, TypeCasters };
+// Instead, export TypeCasters
+export { TypeCasters };

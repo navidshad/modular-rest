@@ -1,4 +1,4 @@
-import { DatabaseTriggerContext } from './database_trigger';
+import DatabaseTrigger, { DatabaseTriggerContext } from './database_trigger';
 
 /**
  * Type for CMS operations that can trigger a callback
@@ -29,9 +29,8 @@ export type CmsOperation = 'update-one' | 'insert-one' | 'remove-one';
  * });
  * ```
  */
-export class CmsTrigger {
-  operation: CmsOperation;
-  callback: (context: DatabaseTriggerContext) => void;
+export class CmsTrigger extends DatabaseTrigger {
+
 
   /**
    * Creates a new CmsTrigger instance
@@ -52,10 +51,9 @@ export class CmsTrigger {
    */
   constructor(
     operation: CmsOperation,
-    callback: (context: DatabaseTriggerContext) => void = () => {}
+    callback: (context: DatabaseTriggerContext) => void = () => { }
   ) {
-    this.operation = operation;
-    this.callback = callback;
+    super(operation, callback);
   }
 }
 

@@ -54,7 +54,10 @@ In a complex application, you may need to perform additional actions after a dat
 
 ### Database Triggers
 Database triggers allow you to define callbacks for specific database operations on a collection.
+
 <!-- @include: @/server-client-ts/generative/classes/databaseTrigger.md -->
+
+
 
 ### CMS Triggers
 CMS triggers allow you to define callbacks for operations performed via the CMS.

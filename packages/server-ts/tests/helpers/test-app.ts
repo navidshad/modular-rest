@@ -28,6 +28,7 @@ export interface TestAppContext {
   uploadDir: string;
   adminToken: string;
   dbPrefix: string;
+  mongoOption?: RestOptions['mongo'];
   cleanup: () => Promise<void>;
 }
 
@@ -138,6 +139,7 @@ export async function createIntegrationTestApp(
     uploadDir,
     adminToken,
     dbPrefix,
+    mongoOption: options.mongo,
     cleanup,
   };
 }

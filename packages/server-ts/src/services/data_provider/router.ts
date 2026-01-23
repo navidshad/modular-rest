@@ -92,11 +92,7 @@ dataProvider.post('/find', async (ctx: Context) => {
   await queryRequest
     .exec()
     .then(async docs => {
-      // Call trigger
-      service.triggers.call('find', body.database, body.collection, {
-        query: body.query,
-        queryResult: docs,
-      });
+
 
       ctx.body = { data: docs };
     })
@@ -151,11 +147,7 @@ dataProvider.post('/find-one', async (ctx: Context) => {
   await queryRequest
     .exec()
     .then(async doc => {
-      // Call trigger
-      service.triggers.call('find-one', body.database, body.collection, {
-        query: body.query,
-        queryResult: doc,
-      });
+
 
       ctx.body = { data: doc };
     })
@@ -194,11 +186,7 @@ dataProvider.post('/count', async (ctx: Context) => {
     .countDocuments(body.query)
     .exec()
     .then(count => {
-      // Call trigger
-      service.triggers.call('count', body.database, body.collection, {
-        query: body.query,
-        queryResult: count,
-      });
+
 
       ctx.body = { data: count };
     })
@@ -241,12 +229,7 @@ dataProvider.post('/update-one', async (ctx: Context) => {
     .updateOne(body.query, body.update, body.options)
     .exec()
     .then(writeOpResult => {
-      // Call trigger
-      service.triggers.call('update-one', body.database, body.collection, {
-        query: body.query,
-        update: body.update,
-        queryResult: writeOpResult,
-      });
+
 
       ctx.body = { data: writeOpResult };
     })
@@ -289,11 +272,7 @@ dataProvider.post('/insert-one', async (ctx: Context) => {
   await new collection(body.doc)
     .save()
     .then(async newDoc => {
-      // Call trigger
-      service.triggers.call('insert-one', body.database, body.collection, {
-        doc: body.doc,
-        queryResult: newDoc,
-      });
+
 
       ctx.body = { data: newDoc };
     })
@@ -336,11 +315,7 @@ dataProvider.post('/remove-one', async (ctx: Context) => {
     .deleteOne(body.query)
     .exec()
     .then(async (result: any) => {
-      // Call trigger
-      service.triggers.call('remove-one', body.database, body.collection, {
-        query: body.query,
-        queryResult: result,
-      });
+
 
       ctx.body = { data: result };
     })
@@ -380,11 +355,7 @@ dataProvider.post('/aggregate', async (ctx: Context) => {
     .aggregate(body.pipelines)
     .exec()
     .then(async (result: any) => {
-      // Call trigger
-      service.triggers.call('aggregate', body.database, body.collection, {
-        pipelines: body.pipelines,
-        queryResult: result,
-      });
+
 
       ctx.body = { data: result };
     })

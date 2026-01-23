@@ -189,4 +189,162 @@ describe('data-provider router integration', () => {
       });
     expect(verifyRes.body.data).toBeNull();
   });
+
+  it('triggers are executed on direct model usage and api usage', async () => {
+    // 1. Define a trigger
+    const triggerMock = jest.fn();
+
+    // We need to access the collection definition to add a trigger dynamically for testing
+    // or we assume the existing setup allows us to mock/spy on something.
+    // However, since we are in an integration test with a real app context, 
+    // modifying the collection definition on the fly might be tricky if models are already compiled.
+    // Ideally we should have a test collection with triggers defined.
+
+    // Let's create a dynamic collection definition with a trigger for this test if possible,
+    // or allow the test helper to set one up.
+    // Since we cannot easily modify the setup here without changing helpers, 
+    // and the user asked to "add new test case" to this file, 
+    // we need to assume there is a way or we need to add a collection definition here.
+
+    // Looking at the imports, we can import defineCollection etc.
+    // But the app is already created in beforeAll via createIntegrationTestApp().
+
+    // IF we cannot add a new collection easily, we'll try to spy on console or a side effect 
+    // if there are existing triggers. But the current test app seems to use standard collections.
+
+    // Let's assume we can register a new collection via a service method if available, 
+    // or we might need to modify the test helper. 
+    // For now, I will write the test assuming we can verify the trigger via a mocked callback 
+    // attached to a new collection we define locally and register.
+
+    const { defineCollection } = require('../../src/class/collection_definition');
+    const { Permission } = require('../../src/class/security');
+    const { DatabaseTrigger } = require('../../src/class/database_trigger');
+    const { Schema } = require('mongoose');
+    const modelRegistry = require('../../src/services/data_provider/model_registry').default;
+    const service = require('../../src/services/data_provider/service');
+
+    const triggerCallback = jest.fn();
+    const trigger = new DatabaseTrigger('insert-one', triggerCallback);
+
+    const testCollectionDef = defineCollection({
+      database: 'test_db',
+      collection: 'trigger_test',
+      schema: new Schema({ name: String }),
+      permissions: [
+        new Permission({ accessType: 'anonymous_access', read: true, write: true }),
+        new Permission({ accessType: 'god_access', read: true, write: true })
+      ],
+      triggers: [trigger]
+    });
+
+    // Register this new collection
+    await service.addCollectionDefinitionByList({
+      list: [testCollectionDef],
+      mongoOption: ctx.mongoOption // We need to access mongoOption from ctx
+    });
+
+    // 2. Perform operation via API
+    await ctx.request
+      .post('/data-provider/insert-one')
+      .set('authorization', ctx.adminToken)
+      .send({
+        database: 'test_db',
+        collection: 'trigger_test',
+        doc: { name: 'api_insert' }
+      })
+      .expect(200);
+
+    // Verify trigger called
+    expect(triggerCallback).toHaveBeenCalledTimes(1);
+    expect(triggerCallback.mock.calls[0][0].doc).toMatchObject({ name: 'api_insert' });
+
+    // 3. Perform operation via Mongoose Model directly
+    const Model = testCollectionDef.model;
+    await new Model({ name: 'direct_insert' }).save();
+
+    // Verify trigger called again
+    expect(triggerCallback).toHaveBeenCalledTimes(2);
+    expect(triggerCallback.mock.calls[1][0].doc).toMatchObject({ name: 'direct_insert' });
+  });
+
+  it('triggers find-one-and-update', async () => {
+    // 1. Setup Trigger
+    const { defineCollection } = require('../../src/class/collection_definition');
+    const { Permission } = require('../../src/class/security');
+    const { DatabaseTrigger } = require('../../src/class/database_trigger');
+    const { Schema } = require('mongoose');
+    const service = require('../../src/services/data_provider/service');
+
+    const triggerCallback = jest.fn();
+    const trigger = new DatabaseTrigger('find-one-and-update', triggerCallback);
+
+    const testCollectionDef = defineCollection({
+      database: 'test_db',
+      collection: 'trigger_update_test',
+      schema: new Schema({ name: String, version: Number }),
+      permissions: [
+        new Permission({ accessType: 'anonymous_access', read: true, write: true }),
+        new Permission({ accessType: 'god_access', read: true, write: true })
+      ],
+      triggers: [trigger]
+    });
+
+    await service.addCollectionDefinitionByList({
+      list: [testCollectionDef],
+      mongoOption: ctx.mongoOption
+    });
+
+    // 2. Insert initial doc
+    const Model = testCollectionDef.model;
+    const doc = await new Model({ name: 'initial', version: 1 }).save();
+
+    // 3. Update via Mongoose
+    await Model.findOneAndUpdate({ _id: doc._id }, { $set: { version: 2 } });
+
+    // 4. Verify Trigger
+    expect(triggerCallback).toHaveBeenCalledTimes(1);
+    expect(triggerCallback.mock.calls[0][0].query).toMatchObject({ _id: doc._id });
+    expect(triggerCallback.mock.calls[0][0].update).toMatchObject({ $set: { version: 2 } });
+  });
+
+  it('triggers delete-many', async () => {
+    // 1. Setup Trigger
+    const { defineCollection } = require('../../src/class/collection_definition');
+    const { Permission } = require('../../src/class/security');
+    const { DatabaseTrigger } = require('../../src/class/database_trigger');
+    const { Schema } = require('mongoose');
+    const service = require('../../src/services/data_provider/service');
+
+    const triggerCallback = jest.fn();
+    const trigger = new DatabaseTrigger('delete-many', triggerCallback);
+
+    const testCollectionDef = defineCollection({
+      database: 'test_db',
+      collection: 'trigger_delete_many_test',
+      schema: new Schema({ name: String }),
+      permissions: [
+        new Permission({ accessType: 'anonymous_access', read: true, write: true }),
+        new Permission({ accessType: 'god_access', read: true, write: true })
+      ],
+      triggers: [trigger]
+    });
+
+    await service.addCollectionDefinitionByList({
+      list: [testCollectionDef],
+      mongoOption: ctx.mongoOption
+    });
+
+    // 2. Insert docs
+    const Model = testCollectionDef.model;
+    await Model.insertMany([{ name: 'doc1' }, { name: 'doc2' }]);
+
+    // 3. Delete via Mongoose
+    await Model.deleteMany({ name: { $regex: 'doc' } });
+
+    // 4. Verify Trigger
+    expect(triggerCallback).toHaveBeenCalledTimes(1);
+    expect(triggerCallback.mock.calls[0][0].query).toMatchObject({ name: { $regex: 'doc' } });
+    expect(triggerCallback.mock.calls[0][0].queryResult.deletedCount).toBe(2);
+  });
 });
