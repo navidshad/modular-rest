@@ -1,6 +1,6 @@
 {
 	"name": "@modular-rest/server",
-	"version": "1.20.1",
+	"version": "1.21.0",
 	"description": "TypeScript version of a nodejs module based on KOAJS for developing Rest-APIs in a modular solution.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
